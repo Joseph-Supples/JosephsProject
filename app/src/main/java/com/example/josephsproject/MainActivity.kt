@@ -1,5 +1,6 @@
 package com.example.josephsproject
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         val moviesButton = findViewById<Button>(R.id.button5)
         moviesButton.setOnClickListener {
             Toast.makeText(this,"Movies",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this,Movies::class.java).apply{
+            }
+            startActivity(intent)
         }
 
         val parksButton = findViewById<Button>(R.id.button8)
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             Toast.makeText(this,"Login",Toast.LENGTH_SHORT).show()
         }
+
+
 
     }
 }

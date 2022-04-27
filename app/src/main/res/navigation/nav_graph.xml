@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainActivity3">
+    <activity
+        android:id="@+id/mainActivity3"
+        android:name="com.example.josephsproject.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <activity
+        android:id="@+id/movies4"
+        android:name="com.example.josephsproject.Movies"
+        android:label="activity_movies"
+        tools:layout="@layout/activity_movies" />
+    <activity
+        android:id="@+id/movieDetail4"
+        android:name="com.example.josephsproject.MovieDetail"
+        android:label="activity_movie_detail"
+        tools:layout="@layout/activity_movie_detail" />
+    <action
+        android:id="@+id/action_global_mainActivity3"
+        app:destination="@id/mainActivity3" />
+</navigation>
