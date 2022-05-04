@@ -2,10 +2,6 @@ package com.example.josephsproject
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 
@@ -169,7 +165,7 @@ class Movies : AppCompatActivity() {
             )
         )
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val recyclerView = findViewById<RecyclerView>(R.id.cam_recycle)
         recyclerView.adapter = CustomAdapter(movies)
 
     }

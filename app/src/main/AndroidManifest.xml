@@ -3,6 +3,7 @@
     package="com.example.josephsproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,15 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JosephsProject">
         <activity
+            android:name=".Traffic"
+            android:exported="false" />
+        <activity
             android:name=".MovieDetail"
-            android:label="Movie Details"
             android:exported="false"
-            android:parentActivityName="com.example.josephsproject.Movies"/>
+            android:label="Movie Details"
+            android:parentActivityName=".Movies" />
         <activity
             android:name=".Movies"
-            android:label="List of Movies"
             android:exported="false"
-            android:parentActivityName="com.example.josephsproject.Movies"/>
+            android:label="List of Movies"
+            android:parentActivityName=".Movies" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

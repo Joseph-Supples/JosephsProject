@@ -12,10 +12,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val trafficButton = findViewById<Button>(R.id.button7)
         trafficButton.setOnClickListener{
             Toast.makeText(this,"Traffic",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this,Traffic::class.java).apply{
+            }
+            startActivity(intent)
         }
 
         val moviesButton = findViewById<Button>(R.id.button5)
