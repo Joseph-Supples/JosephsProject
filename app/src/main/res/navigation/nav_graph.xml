@@ -22,4 +22,9 @@
     <action
         android:id="@+id/action_global_mainActivity3"
         app:destination="@id/mainActivity3" />
+    <activity
+        android:id="@+id/traffic"
+        android:name="com.example.josephsproject.Traffic"
+        android:label="activity_traffic"
+        tools:layout="@layout/activity_traffic" />
 </navigation>
