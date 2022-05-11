@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.location.Geocoder;
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
@@ -20,10 +21,8 @@ import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationServices.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -34,7 +33,6 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
 
     // The entry point to the Fused Location Provider.
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
     private var map: GoogleMap? = null
 
     private var locationPermissionGranted = false
@@ -71,6 +69,7 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
 
 
             }
+    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         this.map = map
 
@@ -85,6 +84,12 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
         val avail = info?.isAvailable
         val connected = info?.isConnected
         var camList = ArrayList<Camera>()
+
+        map.uiSettings.setZoomControlsEnabled(true)
+        updateLocationUI()
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation()
 
         if (info != null && avail == true && connected == true) {
 
@@ -122,19 +127,9 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
                                 .position(pos)
                                 .title(tempCam.Description)
                         )
-                        map.moveCamera(CameraUpdateFactory.newLatLng(pos))
 
                     }
-//        val sydney = LatLng(-33.852, 151.211)
-//        map.addMarker(
-//            MarkerOptions()
-//                .position(sydney)
-//                .title("Marker in Sydney")
-//        )
-//        map.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-                    // ...
 
-                    // Turn on the My Location layer and the related control on the map.
 
                 },
                 Response.ErrorListener { error ->
@@ -157,10 +152,11 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(this,"No internet/connection available - try again!", Toast.LENGTH_LONG).show()
         }
 
-        updateLocationUI()
+        Log.e("Map","Made it through if/else")
 
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation()
+
+
+
     }
 
 
@@ -178,12 +174,13 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
         if (ContextCompat.checkSelfPermission(this.applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
-            var locationPermissionGranted = true
+            locationPermissionGranted = true
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
         }
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
@@ -209,10 +206,13 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
             return
         }
         try {
+            Log.e("Map","in UpdateLocationUI, trying")
             if (locationPermissionGranted) {
+                Log.e("Map", "permission granted")
                 map?.isMyLocationEnabled = true
                 map?.uiSettings?.isMyLocationButtonEnabled = true
             } else {
+                Log.e("Map", "permission isn't granted")
                 map?.isMyLocationEnabled = false
                 map?.uiSettings?.isMyLocationButtonEnabled = false
                 lastKnownLocation = null
@@ -236,11 +236,22 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
                     if (task.isSuccessful) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.result
+                        var gc = Geocoder(applicationContext)
+                        var address = gc.getFromLocation(lastKnownLocation!!.latitude,lastKnownLocation!!.longitude,1)
+
                         if (lastKnownLocation != null) {
+                            Log.e("Map","Have Location")
+                            map?.addMarker(
+                                MarkerOptions()
+                                    .position(LatLng(lastKnownLocation!!.latitude,lastKnownLocation!!.longitude))
+                                    .title(address.get(0).getAddressLine(0))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                            )
+                            Log.e("Map","Added Location")
                             map?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
-                                LatLng(lastKnownLocation!!.latitude,
-                                    lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
+                                    LatLng(lastKnownLocation!!.latitude,
+                                        lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
                         }
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
