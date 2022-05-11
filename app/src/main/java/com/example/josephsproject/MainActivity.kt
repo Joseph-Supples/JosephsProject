@@ -33,9 +33,12 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Parks",Toast.LENGTH_SHORT).show()
         }
 
-        val citiesButton = findViewById<Button>(R.id.button4)
-        citiesButton.setOnClickListener {
-            Toast.makeText(this,"Cities",Toast.LENGTH_SHORT).show()
+        val cameraMap = findViewById<Button>(R.id.button4)
+        cameraMap.setOnClickListener {
+            Toast.makeText(this,"Camera Map",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this,CameraMap::class.java).apply{
+            }
+            startActivity(intent)
         }
 
         val loginButton = findViewById<Button>(R.id.button)

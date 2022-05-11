@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">JosephsProject</string>
     <string name="AboutMeTitle">All About Me</string>
-    <string name="cities">Cities</string>
+    <string name="cameraMap">Camera Map</string>
     <string name="parks">Parks</string>
     <string name="music">Music</string>
     <string name="movies">Movies</string>

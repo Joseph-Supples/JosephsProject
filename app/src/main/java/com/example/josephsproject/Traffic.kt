@@ -1,5 +1,6 @@
 package com.example.josephsproject
 
+import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,8 @@ import com.google.gson.Gson
 
 
 class Traffic : AppCompatActivity() {
+    @SuppressLint("MissingPermission")
+    var camList = ArrayList<Camera>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_traffic)
@@ -23,7 +26,6 @@ class Traffic : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         val url = "https://web6.seattle.gov/Travelers/api/Map/Data?zoomId=13&type=2"
         var gson = Gson()
-        var camList = ArrayList<Camera>()
 
         var actionBar = getSupportActionBar()
         if (actionBar != null) {
@@ -45,6 +47,7 @@ class Traffic : AppCompatActivity() {
                     val camJsonArray = response.getJSONArray("Features")
                     for (i in 0 until camJsonArray.length()) {
                         var jsonEle = camJsonArray.getJSONObject(i)
+                        var camcoord = jsonEle.getJSONArray("PointCoordinate")
                         var camjson = jsonEle.getJSONArray("Cameras").getJSONObject(0)
                         var camId = camjson.getString("Id")
                         var camDesc = camjson.getString("Description")
@@ -58,7 +61,7 @@ class Traffic : AppCompatActivity() {
                         }
 
 
-                        var tempCam = Camera(camId, camDesc, camUrl, camType)
+                        var tempCam = Camera(camId, camDesc, camUrl, camType,camcoord)
                         camList.add(tempCam)
                         Log.e("Traffic", "Camera added to list")
 
@@ -88,5 +91,10 @@ class Traffic : AppCompatActivity() {
             }
         }
         return super.onContextItemSelected(item)
+    }
+
+    @JvmName("getCamList1")
+    fun getCamList(): ArrayList<Camera> {
+        return camList
     }
 }
