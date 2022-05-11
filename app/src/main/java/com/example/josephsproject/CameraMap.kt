@@ -31,7 +31,6 @@ import com.google.gson.Gson
 
 class CameraMap : AppCompatActivity(), OnMapReadyCallback {
 
-    // The entry point to the Fused Location Provider.
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var map: GoogleMap? = null
 
@@ -42,8 +41,7 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    // The geographical location where the device is currently located. That is, the last-known
-    // location retrieved by the Fused Location Provider.
+
     private var lastKnownLocation: Location? = null
 
 
@@ -85,11 +83,7 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
         val connected = info?.isConnected
         var camList = ArrayList<Camera>()
 
-        map.uiSettings.setZoomControlsEnabled(true)
-        updateLocationUI()
 
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation()
 
         if (info != null && avail == true && connected == true) {
 
@@ -114,7 +108,7 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
 
                         var tempCam = Camera(camId, camDesc, camUrl, camType, camcoord)
                         camList.add(tempCam)
-                        Log.e("Traffic", "Camera added to list")
+
 
 
                     }
@@ -137,10 +131,13 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
                 }
             )
 
+            getLocationPermission()
 
+            map.uiSettings.setZoomControlsEnabled(true)
+            updateLocationUI()
 
-
-
+            // Get the current location of the device and set the position of the map.
+            getDeviceLocation()
 
 
 
@@ -152,7 +149,6 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(this,"No internet/connection available - try again!", Toast.LENGTH_LONG).show()
         }
 
-        Log.e("Map","Made it through if/else")
 
 
 
@@ -206,13 +202,10 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
             return
         }
         try {
-            Log.e("Map","in UpdateLocationUI, trying")
             if (locationPermissionGranted) {
-                Log.e("Map", "permission granted")
                 map?.isMyLocationEnabled = true
                 map?.uiSettings?.isMyLocationButtonEnabled = true
             } else {
-                Log.e("Map", "permission isn't granted")
                 map?.isMyLocationEnabled = false
                 map?.uiSettings?.isMyLocationButtonEnabled = false
                 lastKnownLocation = null
@@ -240,14 +233,12 @@ class CameraMap : AppCompatActivity(), OnMapReadyCallback {
                         var address = gc.getFromLocation(lastKnownLocation!!.latitude,lastKnownLocation!!.longitude,1)
 
                         if (lastKnownLocation != null) {
-                            Log.e("Map","Have Location")
                             map?.addMarker(
                                 MarkerOptions()
                                     .position(LatLng(lastKnownLocation!!.latitude,lastKnownLocation!!.longitude))
                                     .title(address.get(0).getAddressLine(0))
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                             )
-                            Log.e("Map","Added Location")
                             map?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
                                     LatLng(lastKnownLocation!!.latitude,
